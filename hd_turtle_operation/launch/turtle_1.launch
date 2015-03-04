@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+  <include file="$(find turtlebot_follower)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find turtlebot_follower)/launch/includes/safety_controller.launch.xml"/>
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+
+  <!-- 不要　-->
+   <!-- <include file="$(find openni_launch)/launch/openni.launch">   -->
+   <!--  <arg name="publish_tf"  value="false"/>  -->
+   <!-- </include> -->
+
+   <include file="$(find turtlebot_bringup)/launch/minimal.launch">
+
+   </include>
+
+
+
+ 
+   <!--###############amclの起動###########################-->
+  <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+    <!--デフォルトでは設定されていたが、認識をしなければならないため、これはコメントアウトする-->
+    <!-- <arg name="rgb_processing" value="false" /> -->
+    <!-- <arg name="depth_registration" value="false" /> -->
+    <!-- <arg name="depth_processing" value="false" /> -->
+    
+    <!-- We must specify an absolute topic name because if not it will be prefixed by "$(arg camera)".
+         Probably is a bug in the nodelet manager: https://github.com/ros/nodelet_core/issues/7 --> 
+    <arg name="scan_topic" value="/turtle_1/scan" />
+  </include>
+  
+  <!-- Map server -->
+<!--  <arg name="map_file" default="$(find turtlebot_navigation)/maps/willow-2010-02-18-0.10.yaml"/> -->
+  <arg name="map_file" default="$(find turtle_operation)/maps/around_table.yaml"/> 
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+  
+  <arg name="initial_pose_x" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
+  <arg name="initial_pose_y" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
+  <arg name="initial_pose_a" default="0.0"/>
+  <include file="$(find turtlebot_navigation)/launch/includes/amcl.launch.xml">
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </include>
+  
+  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
+  <!--#################amclの起動 終わり#############################-->
+
+
+
+
+  <node pkg="kinect_control" type="kinect_control_tilt" name="kinect_control_tilt">
+  </node>
+          
+  <node pkg="recognizer" type="uav_tracker" name="uav_tracker" output="screen">
+    <remap from="cmd_vel" to ="cmd_vel_mux/input/teleop"/>
+    <param name="max_z" value="3.5" />
+    <param name="min_z" value="0.0" />
+    <param name="max_x" value="5.0" />
+    <param name="min_x" value="-5.0" />
+    <param name="max_y" value="5.0" />
+    <param name="min_y" value="-5.0" />
+  </node>
+
+<node pkg="kinect_control" type="base_control" name="base_control" output="screen">
+  <remap from="/base_control/kinect_tilt" to ="/tilt_angle"/>
+  <param name="goal_distance" value="1.0" />
+  <param name="distance_err_threshold" value="0.15" />
+  <param name="goal_scale" value="1.0" />
+  <param name="position_get_rate_raw" value="30.0" />
+  <param name="tilt_angle" value="0.0" />
+  <param name="pursuit_pattern" value="2" />
+  <param name="tilt_init" value="false" />
+</node>
+
+
+<node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5">
+  </node>
+
+<!--パラメーターのremap-->
+  <remap from="scan" to ="/turtle_1/scan"/>
+</launch>

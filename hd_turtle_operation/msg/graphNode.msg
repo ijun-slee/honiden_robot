@@ -1,0 +1,2 @@
+int64 nodeId
+geometry_msgs/PoseStamped pose

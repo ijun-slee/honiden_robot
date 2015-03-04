@@ -1,0 +1,28 @@
+<launch>
+  <include file="$(find turtlebot_follower)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find turtlebot_follower)/launch/includes/safety_controller.launch.xml"/>
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+  
+  <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+    <arg name="rgb_processing"                  value="true"/>  <!-- only required if we use android client -->
+    <arg name="depth_processing"                value="true"/>
+    <arg name="depth_registered_processing"     value="false"/>
+    <arg name="depth_registration"              value="false"/>
+    <arg name="disparity_processing"            value="false"/>
+    <arg name="disparity_registered_processing" value="false"/>
+    <arg name="scan_processing"                 value="false"/>
+  </include>
+<node pkg="detector" type="object_detector" name="object_detector">
+     <remap from="depth/points" to="camera/depth/points"/>
+</node>
+
+<node pkg="detector" type="getCloudview" name="CloudViewer">
+<!-- <remap from="depth/points" to="camera/depth/points"/> -->
+</node>
+
+
+<node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5"/>
+
+
+</launch>

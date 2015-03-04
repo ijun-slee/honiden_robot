@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+ <arg name="namespace" default="tracker"/>
+ <arg name="ns_turtle" default=""/>
+ <arg name="amcl_device_id" default="#1"/> 
+  <!--###############amclの起動###########################-->
+  <!--  <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">  -->
+  <arg name="initial_pose_x" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
+  <arg name="initial_pose_y" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
+  <arg name="initial_pose_a" default="0.0"/>
+
+    <!--デフォルトでは設定されていたが、認識をしなければならないため、これはコメントアウトする-->
+    <!-- <arg name="rgb_processing" value="false" /> -->
+    <!-- <arg name="depth_registration" value="false" /> -->
+    <!-- <arg name="depth_processing" value="false" /> -->
+<!--  <include file="$(find turtlebot_navigation)/launch/includes/amcl.launch.xml"> デフォルト-->
+ <include file="$(find turtle_operation)/launch/includes/multi_amcl.launch.xml">
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+    <arg name="scan_topic" value="/$(arg ns_turtle)_scan" /> 
+    <arg name="ns_turtle" value="$(arg ns_turtle)" /> 
+  </include>
+
+  <include file="$(find turtle_operation)/launch/turtle_sensor.launch"> 
+<!--    <arg name="turtle_device_id" value="#1"/>-->
+   <arg name="turtle_device_id" value="$(arg amcl_device_id)"/>
+    <!-- We must specify an absolute topic name because if not it will be prefixed by "$(arg camera)".
+         Probably is a bug in the nodelet manager: https://github.com/ros/nodelet_core/issues/7 --> 
+    <arg name="scan_topic" value="/$(arg ns_turtle)_scan_raw" /> 
+  </include> 
+
+  <node pkg="topic_handler" type="add_namespace_fi" name="add_namespace_fi">
+    <param name="topic_name_sub" value="/$(arg ns_turtle)_scan_raw" />
+    <param name="topic_name_pub" value="/$(arg ns_turtle)_scan" />
+    <param name="namespace" value="$(arg ns_turtle)" />
+
+  </node>
+  
+
+
+
+  <!-- Map server -->
+  <!--  <arg name="map_file" default="$(find turtlebot_navigation)/maps/willow-2010-02-18-0.10.yaml"/> -->
+  <arg name="map_file" default="$(find turtle_operation)/maps/experiment_hall.yaml"/> 
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+    
+  <!--  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/> デフォルト-->
+  <include file="$(find turtle_operation)/launch/includes/multi_move_base.launch.xml">
+    <arg name="ns_turtle" value="$(arg ns_turtle)"/>
+
+  </include>
+  <!--#################amclの起動 終わり#############################-->
+  <node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5">
+  </node>
+
+  <!--パラメーターのremap-->
+<!--  <remap from="scan" to ="/scan"/> -->
+  <remap from="/$(arg namespace)/odom" to ="/odom"/>
+
+</launch>

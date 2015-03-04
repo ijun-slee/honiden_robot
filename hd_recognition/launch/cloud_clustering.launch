@@ -1,0 +1,49 @@
+<launch>
+<!-- <include file="$(find turtlebot_bringup)/launch/3dsensor.launch"/> -->　
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+
+   <include file="$(find openni_launch)/launch/openni.launch">  
+    <arg name="publish_tf"  value="false"/> 
+  </include> 
+    <include file="$(find turtlebot_bringup)/launch/minimal.launch"/>  
+
+ <node pkg="kinect_control" type="kinect_control_tilt" name="kinect_control_tilt"/>
+          
+<node pkg="recognizer" type="cloud_clustering" name="cloud_clustering" output="screen">
+  <remap from="cloud_clustering/kinect_tilt_angle" to="tilt_angle"/>
+  <param name="min_y" value="-1.0" />
+  <param name="max_y" value="1.0" />
+  <param name="min_x" value="-10.0" />
+  <param name="max_x" value="10.0" />
+  <param name="max_z" value="1.5" />
+  <param name="kinect_height" value="0.48" />
+<param name="kinect_tilt" value="0.0" />
+
+</node>
+
+
+ <node pkg="kinect_control" type="base_control" name="base_control" output="screen">
+<!--  <remap from="base_control/kinect_velocity" to="/mobile_base/commands/velocity"/> -->
+   <remap from="base_control/kinect_tilt" to="/tilt_angle"/> 
+  <!-- <remap from="object_position_from_sensor" to="/cloud_clustering/coord_from_kinect"/> -->
+  <!-- <param name="tilt_err_threshold" value="0.3" /> -->
+  <!-- <param name="pan_err_threshold" value="0.01" /> -->
+  <!-- <param name="pan_threshold" value="1.0/7.0" /> -->
+  <!-- <param name="pan_scale" value="-3.0" /> -->
+  <!-- <param name="tilt_scale" value="-1.0" /> -->
+  <!-- <param name="goal_distance" value="1.5" /> -->
+  <!-- <param name="distance_err_threshold" value="0.15" /> -->
+  <!-- <param name="goal_scale" value="1.0" /> -->
+  <!-- <param name="position_get_rate_raw" value="30.0" /> -->
+   <param name="tilt_angle" value="-25.0" />
+  <!-- <param name="pursuit_pattern" value="2" /> -->
+</node>
+
+
+<!--<node pkg="detector" type="getCloudview" name="CloudViewer"> -->
+<!-- <remap from="depth/points" to="camera/depth/points"/> -->
+<!-- </node> -->
+
+<node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5"/>
+</launch>

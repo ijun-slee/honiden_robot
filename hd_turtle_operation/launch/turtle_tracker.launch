@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <arg name="tracker_device_id" default="#1"/> 
+  <arg name="ns" default=""/>
+  <arg name="ns_turtle" default=""/>
+
+  <include file="$(find openni_launch)/launch/openni.launch">
+  <arg name="tf_prefix"      value="$(arg ns_turtle)/tracker"/>
+ <!-- <arg name="camera"      value="$(arg ns)"/> -->
+  <arg name="device_id" value="$(arg tracker_device_id)"/>
+  <arg name="depth_registered_processing"     value="true"/>
+
+  </include>
+
+  <node pkg="kinect_control" type="kinect_control_tilt" name="kinect_control_tilt">
+  </node>
+  
+<!--  <node pkg="recognizer" type="uav_tracker" name="uav_tracker" output="screen"> -->
+  <node pkg="recognizer" type="uav_tracker" name="uav_tracker">
+    <remap from="cmd_vel" to ="cmd_vel_mux/input/teleop"/>
+    <param name="namespace_" value="$(arg ns)" />
+    <param name="namespace_turtle" value="$(arg ns_turtle)" />
+    <param name="max_z" value="3.5" />
+    <param name="min_z" value="0.0" />
+    <param name="max_x" value="1.0" />
+    <param name="min_x" value="-1.0" />
+    <param name="max_y" value="1.0" />
+    <param name="min_y" value="-1.0" />
+  </node>
+
+  <node pkg="turtle_operation" type="turtle_tf_broadcaster" name="turtle_tf_broadcaster" output="screen">
+    <param name="child_frame" value="kinect_" />
+    <param name="global_frame" value="map" />
+    <param name="namespace_sensor" value="$(arg ns)" />
+    <param name="namespace_turtle" value="$(arg ns_turtle)"/>
+    <param name="odom_topic_name" value="odom"/>
+    <param name="kinect_tilt_topic_name" value="cur_tilt_angle"/>
+    <param name="debug_" value="true"/>
+    <param name="rate" value="10"/>
+  </node>
+
+
+  <node pkg="kinect_control" type="base_control" name="base_control" output="screen">
+    <remap from="base_control/kinect_velocity" to="/$(arg ns_turtle)/follower_velocity_smoother/raw_cmd_vel"/>
+    <remap from="base_control/kinect_tilt" to ="tilt_angle"/>
+    <param name="goal_distance" value="1.0" />
+    <param name="distance_err_threshold" value="0.15" />
+    <param name="goal_scale" value="1.0" />
+    <param name="pan_scale" value="10.0" />
+    <param name="position_get_rate_raw" value="30.0" />
+    <param name="tilt_angle" value="0.0" />
+    <param name="pursuit_pattern" value="1" />
+    <param name="tilt_init" value="true" />
+  </node>
+
+  <node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5"/>
+</launch>

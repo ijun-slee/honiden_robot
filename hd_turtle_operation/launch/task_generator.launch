@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <arg name="evolve_n" default="100"/> 
+  <arg name="evolve_size" default="10"/> 
+  <arg name="population_n" default="20"/> 
+  <arg name="finest_n" default="10"/> 
+  <arg name="task_order_set_size" default="20"/> 
+  <arg name="n_turtle" default="3"/> 
+
+  <node pkg="turtle_operation" type="task_generator" name="task_generator" output="screen" required="true">
+    <remap from="ground_map" to ="occupancy_grid_map"/>
+    <remap from="obstacle_map" to ="obstacle_map"/>
+    <remap from="path_plan_set" to ="path_plan_set"/>
+    <param name="obstacle_map_flag" value="true"/>
+    <param name="grid_rate" value="8"/>
+    <param name="path_length_threshold" value="10"/>
+    <param name="path_length_screening_threshold" value="6"/>
+    <param name="n_turtle" value="$(arg n_turtle)"/>
+    <param name="sameInitPositions" value="true"/>
+    <param name="initPosition_x" value="400"/>
+    <param name="initPosition_y" value="400"/>   
+    <param name="GAevolveNumTime" value="$(arg evolve_n)"/>
+    <param name="taskOrderSetSize" value="$(arg task_order_set_size)"/>
+    <param name="GApopulationSize" value="$(arg population_n)"/>
+    <param name="GAevolveSize" value="$(arg evolve_size)"/>
+    <param name="GAFinestGroupsSize" value="$(arg finest_n)"/>
+    <param name="GAAllocationMode" value="1"/>
+  </node>
+</launch>

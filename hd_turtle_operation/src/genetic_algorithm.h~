@@ -1,0 +1,44 @@
+  class TaskAllocGA{
+  private:
+    unsigned int numTaskCandidate;//タスク候補の数
+    int numTurtle;//タートルの数
+    int populationSize;//個体群の数
+    TaskCandidate task_candidate;
+    TaskOrder finestTaskOrder;
+    double resolution;//
+    PointsWithID path;
+    int path_room;//IDの猶予
+    //    turtle_operation::pathPlanSet path_plan_set;
+    std::vector<TaskOrder> taskOrderSet;//taskOrderの現在の個体
+    // std::vector<geometry_msgs::PoseStamped> path;
+    int path_end_id;
+    void sortFitness();//適応の順に並べる
+    void evolve();//進化過程
+  public:
+    TaskAllocGA(int nTurtle, int popSize, TaskCandidate tc, 
+		double res, PointsWithID p){
+      numTaskCandidate = tc.size();
+      numTurtle = nTurtle;
+      task_candidate = tc;
+      populationSize = popSize;
+      resolution = res;
+      path  = p;
+      //    path_plan_set = pps;
+      path = p;
+      path_end_id = path.size() - 1;
+      double path_room_meter = 0.50;//猶予
+      path_room = path_room_meter / resolution;
+      
+      printf("Task Allocation Genetic Algorithm\n");
+      printf("# of Task Candidate: %d \n# of Turtle: %d\n",
+	     numTaskCandidate, numTurtle);
+      printf("Map resolution: %f  Path room: %d\n", 
+	     resolution, path_room);
+    }
+    ~TaskAllocGA(){}
+    void createIndividual();
+
+    double getFitnessScoreFromOrder();//評価関数の定義。
+    //    bool isAdapted();
+    TaskOrder getFinestTaskOrder();//
+  };

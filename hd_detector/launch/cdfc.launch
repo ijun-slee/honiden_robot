@@ -1,0 +1,53 @@
+<launch>
+
+  <include file="$(find turtlebot_follower)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find turtlebot_follower)/launch/includes/safety_controller.launch.xml"/>
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+  
+  
+  <!-- <include file="$(find turtlebot_bringup)/launch/3dsensor.launch"> -->
+  <include file="$(find openni_launch)/launch/openni.launch"/>
+  
+  <node pkg="kinect_control" type="kinect_control_tilt" name="kinect_control_tilt"/>
+  
+  <node pkg="detector" type="cdfc" name="cdfc" output="screen">
+    <!--    <remap from="points" to="camera/depth_registered/points"/> -->
+    
+    <!--  <remap from="depth/points" to="camera/depth/points"/> -->
+    <remap from="cmd_vel" to ="cmd_vel_mux/input/teleop"/>
+    <param name="x_offset" value="0.0" />
+    <param name="y_offset" value="50.0" />
+    <param name="z_offset" value="0.0" />
+    <param name="smoothing_range" value="2" />
+    <param name="max_z" value="2.5" />
+    <param name="min_z" value="0.0" />
+    <param name="max_x" value="0.35" />
+    <param name="min_x" value="-0.35" />
+    <param name="max_y" value="2.5" />
+    <param name="min_y" value="-0.0" />
+    <param name="osc_ip" value="136.187.81.143" />
+
+  </node>
+
+  <node pkg="kinect_control" type="base_control" name="base_control" output="screen">
+    <remap from="/base_control/kinect_tilt" to ="/tilt_angle"/>
+
+
+    <param name="goal_distance" value="1.0" />
+    <param name="distance_err_threshold" value="0.15" />
+    <param name="goal_scale" value="1.0" />
+    <param name="position_get_rate_raw" value="30.0" />
+    <param name="tilt_angle" value="0.0" />
+    <param name="pursuit_pattern" value="2" />
+  </node>
+
+
+  <!--<node pkg="detector" type="getCloudview" name="CloudViewer"> -->
+  <!-- <remap from="depth/points" to="camera/depth/points"/> -->
+  <!-- </node> -->
+
+
+
+  <node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5"/>
+</launch>

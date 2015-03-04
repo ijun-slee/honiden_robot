@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+<!-- turtle_1用。scantopicの名前が変えてある。-->
+
+ <arg name="namespace" default="tracker"/>
+ <arg name="scanname" default="/scan1"/>
+
+  <include file="$(find topic_handler)/launch/add_namespace.launch"/>
+
+ <include file="$(find turtlebot_follower)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find turtlebot_follower)/launch/includes/safety_controller.launch.xml"/>
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+
+  <!--上のKinectの起動-->
+  <include file="$(find turtle_operation)/launch/turtle_tracker.launch" ns="$(arg namespace)">
+    <arg name="ns" value="$(arg namespace)"/>
+   <arg name="tracker_device_id" value="A00362805336053A"/>
+   <!--   <arg name="tracker_device_id" value="#2"/>   -->
+  </include> 
+
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch">
+
+  </include>
+  
+  <!--###############amclの起動###########################-->
+  <arg name="initial_pose_x" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
+  <arg name="initial_pose_y" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
+  <arg name="initial_pose_a" default="0.0"/>
+  <include file="$(find turtlebot_navigation)/launch/includes/amcl.launch.xml">
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+    <arg name="scan_topic" value="$(arg scanname)" /> 
+  </include>
+
+  <include file="$(find turtle_operation)/launch/turtle_sensor.launch"> 
+<!--    <arg name="turtle_device_id" value="#1"/>-->
+   <arg name="turtle_device_id" value="A00361814136040A"/>
+    <!-- We must specify an absolute topic name because if not it will be prefixed by "$(arg camera)".
+         Probably is a bug in the nodelet manager: https://github.com/ros/nodelet_core/issues/7 --> 
+    <arg name="scan_topic" value="$(arg scanname)" /> 
+  </include> 
+  
+  <!-- Map server -->
+  <arg name="map_file" default="$(find turtle_operation)/maps/around_table.yaml"/> 
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
+  <!--#################amclの起動 終わり#############################-->
+
+
+  <node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5">
+  </node>
+
+  <!--パラメーターのremap-->
+  <remap from="/$(arg namespace)/odom" to ="/odom"/>
+</launch>

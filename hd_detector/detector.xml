@@ -1,0 +1,7 @@
+<library path="lib/libdetector">
+  <class name="simple_detector/detector" type="simple_detector::detector" base_class_type="nodelet::Nodelet">
+    <description>
+      The detector node.
+    </description>
+  </class>
+</library> 

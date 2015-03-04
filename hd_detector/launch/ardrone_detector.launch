@@ -1,0 +1,74 @@
+<launch>
+  <include file="$(find turtlebot_follower)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find turtlebot_follower)/launch/includes/safety_controller.launch.xml"/>
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+
+
+<!-- <include file="$(find turtlebot_bringup)/launch/3dsensor.launch"/> -->　
+   <include file="$(find openni_launch)/launch/openni.launch">  
+
+    <arg name="publish_tf"  value="false"/> 
+  </include> 
+    <include file="$(find turtlebot_bringup)/launch/minimal.launch"/>  
+<!-- この上の部分は必要らしい。 -->
+<!-- これがないと、TFの例外処理(TF exception)が働いてしまう。 -->
+
+ <node pkg="kinect_control" type="kinect_control_tilt" name="kinect_control_tilt"/>
+
+          
+<node pkg="detector" type="object_detector" name="object_detector" output="screen">
+<remap from="object_detector/tilt_angle" to="tilt_angle"/>
+<remap from="object_detector/discover_pc" to="discover_pc"/>
+<remap from="object_detector/pursuit_pc" to="pursuit_pc"/>
+<remap from="object_detector/ros2osc/request" to="ros2osc/request"/>
+<remap from="kinect_position" to="odom"/>
+  <param name="min_y" value="-10.0" />
+  <param name="max_y" value="10.0" />
+  <param name="min_x" value="-10.0" />
+  <param name="max_x" value="10.0" />
+  <param name="max_z" value="1.5" />
+  <param name="goal_z" value="1.5" />
+  <param name="discovery_number_threshold" value="2000" />
+  <param name="pursuit_number_threshold" value="200" />
+  <param name="distance_threshold" value="0.5" />
+  <param name="centroid_threshold" value="0.5" />
+  <param name="r_threshold" value="100" />
+  <param name="g_threshold" value="100" />
+  <param name="b_threshold" value="100" />
+  <param name="black_rate_threshold" value="0.2" />
+  <param name="kinect_height" value="0.48" />
+<param name="kinect_tilt" value="20" />
+  <param name="x_offset" value="0.1" />
+  <param name="y_offset" value="0.0" />
+  <param name="z_offset" value="0.0" />
+
+</node>
+
+
+ <node pkg="kinect_control" type="base_control" name="base_control" output="screen">
+<!--  <remap from="base_control/kinect_velocity" to="/mobile_base/commands/velocity"/> -->
+ <remap from="base_control/kinect_velocity" to="follower_velocity_smoother/raw_cmd_vel"/>
+  <remap from="base_control/kinect_tilt" to="/tilt_angle"/>
+  <remap from="object_position_from_sensor" to="/object_detector/coord_from_kinect"/>
+  <param name="tilt_err_threshold" value="0.3" />
+  <param name="pan_err_threshold" value="0.01" />
+  <param name="pan_threshold" value="1.0/7.0" />
+  <param name="pan_scale" value="-3.0" />
+  <param name="tilt_scale" value="-1.0" />
+  <param name="goal_distance" value="1.5" />
+  <param name="distance_err_threshold" value="0.15" />
+  <param name="goal_scale" value="1.0" />
+  <param name="position_get_rate_raw" value="30.0" />
+  <param name="tilt_angle" value="20.0" />
+  <param name="pursuit_pattern" value="2" />
+</node>
+
+<!--<node pkg="detector" type="getCloudview" name="CloudViewer"> -->
+<!-- <remap from="depth/points" to="camera/depth/points"/> -->
+<!-- </node> -->
+
+
+
+<node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5"/>
+</launch>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <arg name="room_side" default="15"/> 
+  <arg name="density" default="normal"/>
+  <arg name="file_n" default="1"/>
+  <arg name="save_result_all" default="false"/>
+
+  <node pkg="turtle_operation" type="multi_turtle_operator" name="multi_turtle_operator" output="screen" required="true">
+    <!--    <param name="AllocateMode" value="3"/>-->
+    <param name="AllocateMode" value="3"/>
+    <param name="uav_move_time_mode" value="3"/>
+   <!-- <param name="save_file_dir_name" value="/home/slee/Dropbox/experiment_result/turtle_operation/"/> -->
+   <param name="save_file_dir_name" value="/home/slee/experiment_result/turtle_operation/"/>	
+    <param name="save_file_name" value="test.txt"/>	
+    <param name="exhaustive_result_show_n" value="5"/>	
+    <param name="compare_GA_and_simple" value="true"/>	
+    <param name="compare_GA_and_exhaustive" value="true"/>	
+    <param name="save_result_all" value="$(arg save_result_all)"/>	
+    <param name="showTaskOpenCV" value="false"/>	
+    <param name="room_side" value="$(arg room_side)"/>
+    <param name="density" value="$(arg density)"/>
+    <param name="file_number" value="$(arg file_n)"/>
+    <param name="save_result_all" value="$(arg save_result_all)"/>
+ </node>
+</launch>

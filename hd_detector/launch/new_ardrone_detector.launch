@@ -1,0 +1,37 @@
+<launch>
+  <include file="$(find turtlebot_follower)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find turtlebot_follower)/launch/includes/safety_controller.launch.xml"/>
+  <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
+
+
+<!-- <include file="$(find turtlebot_bringup)/launch/3dsensor.launch"> -->
+<include file="$(find openni_launch)/launch/openni.launch"/>
+
+<node pkg="kinect_control" type="kinect_control_tilt" name="kinect_control_tilt"/>
+          
+<node pkg="detector" type="ardrone_detector" name="ardrone_detector" output="screen">
+<!--    <remap from="points" to="camera/depth_registered/points"/> -->
+ 
+<!--  <remap from="depth/points" to="camera/depth/points"/> -->
+    <remap from="cmd_vel" to ="cmd_vel_mux/input/teleop"/>
+</node>
+
+<node pkg="kinect_control" type="base_control" name="base_control" output="screen">
+<remap from="kinect_velocity" to="mobile_base/commands/velocity"/>
+<remap from="object_position" to="coord_from_kinect"/>
+><remap from="kinect_tilt" to="tilt_angle"/>
+
+</node>
+
+
+
+
+<!--<node pkg="detector" type="getCloudview" name="CloudViewer"> -->
+<!-- <remap from="depth/points" to="camera/depth/points"/> -->
+<!-- </node> -->
+
+
+
+<node pkg="topic_tools" type="throttle" name="camera_throttle"
+        args="messages camera/rgb/image_color/compressed 5"/>
+</launch>
