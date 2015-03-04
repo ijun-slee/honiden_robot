@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(hd_hd_turtle_operation)
+project(hd_turtle_operation)
 
 set(CMAKE_BUILD_TYPE Debug)
 find_package(catkin REQUIRED 
