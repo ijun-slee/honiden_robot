@@ -74,75 +74,75 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 
 ## Declare a cpp library
- add_library(turtle_operator
-   src/turtle_operator.cpp
- )
+#  add_library(turtle_operator
+#    src/turtle_operator.cpp
+#  )
 
- add_library(genetic_algorithm
-   src/genetic_algorithm.cpp
- )
+#  add_library(genetic_algorithm
+#    src/genetic_algorithm.cpp
+#  )
 
-## Declare a cpp executable
- add_executable(multi_turtle_operator src/path_planning.cpp src/multi_turtle_operator.cpp)
- add_executable(single_turtle_operator src/path_planning.cpp src/single_turtle_operator.cpp)
- add_executable(map_handler src/map_handler.cpp)
- add_executable(simple_goal_publisher src/simple_goal_publisher.cpp)
- add_executable(bridge_to_turtle src/bridge_to_turtle.cpp)
- add_executable(turtle_tf_broadcaster src/turtle_tf_broadcaster.cpp)
- add_executable(turtle_tf_listener src/turtle_tf_listener.cpp)
- add_executable(2dgrid_handler src/pra_2dgrid_handler.cpp)
- add_executable(path_planning_test src/path_planning_test.cpp src/path_planning.cpp)
- add_executable(task_generator src/task_generator.cpp)
+# ## Declare a cpp executable
+#  add_executable(multi_turtle_operator src/path_planning.cpp src/multi_turtle_operator.cpp)
+#  add_executable(single_turtle_operator src/path_planning.cpp src/single_turtle_operator.cpp)
+#  add_executable(map_handler src/map_handler.cpp)
+#  add_executable(simple_goal_publisher src/simple_goal_publisher.cpp)
+#  add_executable(bridge_to_turtle src/bridge_to_turtle.cpp)
+#  add_executable(turtle_tf_broadcaster src/turtle_tf_broadcaster.cpp)
+#  add_executable(turtle_tf_listener src/turtle_tf_listener.cpp)
+#  add_executable(2dgrid_handler src/pra_2dgrid_handler.cpp)
+#  add_executable(path_planning_test src/path_planning_test.cpp src/path_planning.cpp)
+#  add_executable(task_generator src/task_generator.cpp)
 
-# ## Add cmake target dependencies of the executable/library
-# ## as an example, message headers may need to be generated before nodes
-# # add_dependencies(hd_turtle_operation_node hd_turtle_operation_generate_messages_cpp)
+# # ## Add cmake target dependencies of the executable/library
+# # ## as an example, message headers may need to be generated before nodes
+# # # add_dependencies(hd_turtle_operation_node hd_turtle_operation_generate_messages_cpp)
 
-# ## Specify libraries to link a library or executable target against
-target_link_libraries(multi_turtle_operator
-  turtle_operator
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-  yaml-cpp-new
- )
+# # ## Specify libraries to link a library or executable target against
+# target_link_libraries(multi_turtle_operator
+#   turtle_operator
+#   ${catkin_LIBRARIES}
+#   ${OpenCV_LIBRARIES}
+#   yaml-cpp-new
+#  )
 
-target_link_libraries(single_turtle_operator
-  turtle_operator
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-  yaml-cpp-new
- )
-target_link_libraries(simple_goal_publisher
-  ${catkin_LIBRARIES}
- )
+# target_link_libraries(single_turtle_operator
+#   turtle_operator
+#   ${catkin_LIBRARIES}
+#   ${OpenCV_LIBRARIES}
+#   yaml-cpp-new
+#  )
+# target_link_libraries(simple_goal_publisher
+#   ${catkin_LIBRARIES}
+#  )
 
-target_link_libraries(map_handler
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
- )
+# target_link_libraries(map_handler
+#   ${catkin_LIBRARIES}
+#   ${OpenCV_LIBRARIES}
+#  )
 
-target_link_libraries(bridge_to_turtle
-  ${catkin_LIBRARIES}
- )
-target_link_libraries(turtle_tf_broadcaster
-  ${catkin_LIBRARIES}
- )
-target_link_libraries(turtle_tf_listener
-  ${catkin_LIBRARIES}
- )
+# target_link_libraries(bridge_to_turtle
+#   ${catkin_LIBRARIES}
+#  )
+# target_link_libraries(turtle_tf_broadcaster
+#   ${catkin_LIBRARIES}
+#  )
+# target_link_libraries(turtle_tf_listener
+#   ${catkin_LIBRARIES}
+#  )
 
-target_link_libraries(2dgrid_handler
-  ${catkin_LIBRARIES}
- )
+# target_link_libraries(2dgrid_handler
+#   ${catkin_LIBRARIES}
+#  )
 
-target_link_libraries(path_planning_test
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
- )
-target_link_libraries(task_generator
-  genetic_algorithm
-  ${catkin_LIBRARIES}
-  )
+# target_link_libraries(path_planning_test
+#   ${catkin_LIBRARIES}
+#   ${OpenCV_LIBRARIES}
+#  )
+# target_link_libraries(task_generator
+#   genetic_algorithm
+#   ${catkin_LIBRARIES}
+#   )
 
 
 
