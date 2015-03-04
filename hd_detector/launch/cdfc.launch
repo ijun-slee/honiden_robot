@@ -8,7 +8,7 @@
   <!-- <include file="$(find turtlebot_bringup)/launch/3dsensor.launch"> -->
   <include file="$(find openni_launch)/launch/openni.launch"/>
   
-  <node pkg="kinect_control" type="kinect_control_tilt" name="kinect_control_tilt"/>
+  <node pkg="hd_kinect_control" type="hd_kinect_control_tilt" name="hd_kinect_control_tilt"/>
   
   <node pkg="detector" type="cdfc" name="cdfc" output="screen">
     <!--    <remap from="points" to="camera/depth_registered/points"/> -->
@@ -29,7 +29,7 @@
 
   </node>
 
-  <node pkg="kinect_control" type="base_control" name="base_control" output="screen">
+  <node pkg="hd_kinect_control" type="base_control" name="base_control" output="screen">
     <remap from="/base_control/kinect_tilt" to ="/tilt_angle"/>
 
 
