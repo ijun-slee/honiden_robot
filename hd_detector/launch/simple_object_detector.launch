@@ -1,5 +1,5 @@
 <launch>
-<node pkg="detector" type="new_object_detector" name="saobject_detector" output="screen">
+<node pkg="hd_detector" type="new_object_detector" name="saobject_detector" output="screen">
      <remap from="depth/points" to="camera/depth/points"/>
 </node>
 </launch>

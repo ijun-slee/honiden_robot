@@ -9,7 +9,7 @@
     <arg name="scan_processing"                 value="false"/>
   </include>
 
-<node pkg="detector" type="getCloudview" name="CloudViewer">
+<node pkg="hd_detector" type="getCloudview" name="CloudViewer">
 <!-- <remap from="depth/points" to="camera/depth/points"/> -->
 </node>
 

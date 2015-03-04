@@ -27,7 +27,7 @@
     <param name="max_z" value="1.2" />
     <param name="goal_z" value="0.6" />
   </node> -->
-<node pkg="detector" type="detector" name="simple_detector">
+<node pkg="hd_detector" type="detector" name="simple_detector">
 <!-- <remap from="depth/points" to="camera/depth/points"/> -->
 </node>
 

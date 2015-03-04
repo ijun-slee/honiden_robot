@@ -12,15 +12,15 @@
     <arg name="disparity_registered_processing" value="false"/>
     <arg name="scan_processing"                 value="false"/>
   </include>
-<!-- <node pkg="detector" type="getCloudview" name="cloudview">
+<!-- <node pkg="hd_detector" type="getCloudview" name="cloudview">
 </node> -->
 
-<node pkg="detector" type="crazy_flie_tracker" name="crazy_flie_tracker" output="screen">
+<node pkg="hd_detector" type="crazy_flie_tracker" name="crazy_flie_tracker" output="screen">
     <remap from="depth/points" to="camera/depth/points"/>
     <remap from="cmd_vel" to ="cmd_vel_mux/input/teleop"/>
 </node>
 
-<!--<node pkg="detector" type="getCloudview" name="CloudViewer"> -->
+<!--<node pkg="hd_detector" type="getCloudview" name="CloudViewer"> -->
 <!-- <remap from="depth/points" to="camera/depth/points"/> -->
 <!-- </node> -->
 

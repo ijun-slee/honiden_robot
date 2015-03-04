@@ -16,7 +16,7 @@
  <node pkg="hd_hd_kinect_control" type="kinect_control_tilt" name="kinect_control_tilt"/>
 
           
-<node pkg="detector" type="object_detector" name="object_detector" output="screen">
+<node pkg="hd_detector" type="object_detector" name="object_detector" output="screen">
 <remap from="object_detector/tilt_angle" to="tilt_angle"/>
 <remap from="object_detector/discover_pc" to="discover_pc"/>
 <remap from="object_detector/pursuit_pc" to="pursuit_pc"/>
@@ -63,7 +63,7 @@
   <param name="pursuit_pattern" value="2" />
 </node>
 
-<!--<node pkg="detector" type="getCloudview" name="CloudViewer"> -->
+<!--<node pkg="hd_detector" type="getCloudview" name="CloudViewer"> -->
 <!-- <remap from="depth/points" to="camera/depth/points"/> -->
 <!-- </node> -->
 

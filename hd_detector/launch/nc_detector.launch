@@ -5,7 +5,7 @@
 
 <include file="$(find openni_launch)/launch/openni.launch"/>
           
-<node pkg="detector" type="nc_detector" name="nc_detector" output="screen">
+<node pkg="hd_detector" type="nc_detector" name="nc_detector" output="screen">
 <!--    <remap from="points" to="camera/depth_registered/points"/> -->
     <remap from="cmd_vel" to ="cmd_vel_mux/input/teleop"/>
 </node>
