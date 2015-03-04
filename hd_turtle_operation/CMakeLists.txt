@@ -73,7 +73,7 @@ catkin_package(
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 
-Declare a cpp library
+#Declare a cpp library
  add_library(turtle_operator
    src/turtle_operator.cpp
  )
