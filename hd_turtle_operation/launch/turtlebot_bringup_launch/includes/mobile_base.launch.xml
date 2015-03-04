@@ -6,7 +6,7 @@
 <launch>
   <arg name="base"/>
   <arg name="ns_turtle" default=""/>
-  <include file="$(find turtle_operation)/launch/turtlebot_bringup_launch/includes/$(arg base)/mobile_base.launch.xml">
+  <include file="$(find hd_turtle_operation)/launch/turtlebot_bringup_launch/includes/$(arg base)/mobile_base.launch.xml">
     <arg name="ns_turtle" value="$(arg ns_turtle)"/>
   </include>
 </launch>

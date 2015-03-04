@@ -6,7 +6,7 @@ namespace turtle_operator{
   void TurtleOperator::publisherInitialize(){
       ROS_INFO("TurtleOperator: publisherInitialize");
       simple_goal_publisher = nh.advertise<geometry_msgs::PoseStamped>(goal_topic_name,1); 
-      goal_node_publisher = nh.advertise<turtle_operation::graphNode>(goal_node_name,1);
+      goal_node_publisher = nh.advertise<hd_turtle_operation::graphNode>(goal_node_name,1);
       //テスト用=====      
       //      geometry_msgs::PoseStamped test;
       // simple_goal_publisher.publish(test);

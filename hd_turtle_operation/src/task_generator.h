@@ -11,21 +11,21 @@
 #include <std_msgs/Float64.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/PoseStamped.h> 
-#include <turtle_operation/graphBasedMap.h>
+#include <hd_turtle_operation/graphBasedMap.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include "yaml-cpp/yaml.h"
-#include <turtle_operation/pathPlanSet.h>
-#include <turtle_operation/observeTask.h>
+#include <hd_turtle_operation/pathPlanSet.h>
+#include <hd_turtle_operation/observeTask.h>
 #include <queue>
 #include <utility>
 #include "MersenneTwister.h"
-#include <turtle_operation/taskCandidates.h>
-#include <turtle_operation/taskOrder.h>
-#include <turtle_operation/taskOrderSet.h>
-#include <turtle_operation/taskOrderSetContainer.h>
+#include <hd_turtle_operation/taskCandidates.h>
+#include <hd_turtle_operation/taskOrder.h>
+#include <hd_turtle_operation/taskOrderSet.h>
+#include <hd_turtle_operation/taskOrderSetContainer.h>
 
 const int NotTask = -1;
 const double UAVSpeed = 3.0;//飛行ロボットの速度。meter/sec
@@ -40,12 +40,12 @@ const double Sigma = 100.0;//Defaultで50.0
 
 
 struct CompareTask{
-  bool operator() (turtle_operation::observeTask &a, turtle_operation::observeTask &b ){
+  bool operator() (hd_turtle_operation::observeTask &a, hd_turtle_operation::observeTask &b ){
     return a.start_id != b.start_id ? a.start_id > b.start_id : a.end_id > b.end_id;
   }
 };
 
-bool ascObserveTask(const turtle_operation::observeTask& a, const turtle_operation::observeTask& b){
+bool ascObserveTask(const hd_turtle_operation::observeTask& a, const hd_turtle_operation::observeTask& b){
   if(a.start_id == b.start_id){
     return a.end_id < b.end_id ;
   }
@@ -82,21 +82,21 @@ class RandContainer{
 };
 
 
-/* bool operator>(const turtle_operation::observeTask& a, const turtle_operation::observeTask& b) */
+/* bool operator>(const hd_turtle_operation::observeTask& a, const hd_turtle_operation::observeTask& b) */
 /* { */
 /*   return a.start_id > b.start_id;   */
 /* } */
 
-/* bool operator<(const turtle_operation::observeTask& a, const turtle_operation::observeTask& b) */
+/* bool operator<(const hd_turtle_operation::observeTask& a, const hd_turtle_operation::observeTask& b) */
 /* { */
 /*   return a.start_id < b.start_id; */
 /* } */
 
 
 
-//typedef  std::priority_queue<turtle_operation::observeTask, std::vector<turtle_operation::observeTask>, CompareTask> TaskCandidate;
+//typedef  std::priority_queue<hd_turtle_operation::observeTask, std::vector<hd_turtle_operation::observeTask>, CompareTask> TaskCandidate;
 
-typedef  std::vector<turtle_operation::observeTask> TaskCandidate;
+typedef  std::vector<hd_turtle_operation::observeTask> TaskCandidate;
 
 typedef std::pair<int, int> TaskCombination;
     /*
@@ -385,7 +385,7 @@ namespace turtle_operator{
     double current_finest_fitness;//げんざいの最もよい適応度
     double current_finest_fitness_global;//げんざいの最もよい適応度
     bool debug_;
-    //    turtle_operation::pathPlanSet path_plan_set;
+    //    hd_turtle_operation::pathPlanSet path_plan_set;
     std::vector<TaskOrder> taskOrderSet;//taskOrderの現在の個体
     //  std::vector<AllocatedTasks> taskCombinationSet;//Taskの割り振り方の現在の個体
     //  std::vector<RobotTasks> RobotTasksSet;//現在のタスクの振り方の個体たち
@@ -474,7 +474,7 @@ namespace turtle_operator{
     }
     void createIndividual();
     int simpleCreateIndividual();
-    void simpleCreateIndividualFromGraphBasedMap(const turtle_operation::graphBasedMap &graph_based_map );
+    void simpleCreateIndividualFromGraphBasedMap(const hd_turtle_operation::graphBasedMap &graph_based_map );
 
     double getFitnessScoreFromOrder(TaskOrder task_order);//評価関数の定義。
     double getFitnessScoreFromOrder(TaskAllocation &ta);//評価関数の定義。
@@ -489,14 +489,14 @@ namespace turtle_operator{
     void calcFitnessScoreForCurrentGroups();
     void evolve(int mode);//進化過程
     void selection();
-    void setTaskOrderInContainer(turtle_operation::taskOrderSetContainer &tosc, int taskOrderSetSize);
+    void setTaskOrderInContainer(hd_turtle_operation::taskOrderSetContainer &tosc, int taskOrderSetSize);
     void showFinestTaskCombination();
     void showFinestGroups();
     void updateGroupsInformation();//個体の情報をUpdate。一番高いスコアのやつと、その順列
-    turtle_operation::taskOrderSet getCurrentFinestTaskCombinationMsg(){
-      turtle_operation::taskOrderSet tmp_task_order_set;
+    hd_turtle_operation::taskOrderSet getCurrentFinestTaskCombinationMsg(){
+      hd_turtle_operation::taskOrderSet tmp_task_order_set;
 
-      turtle_operation::taskOrder tmp_task_order;
+      hd_turtle_operation::taskOrder tmp_task_order;
       for(int i = 0; i <current_finest_task_combination.size();i++){
 	tmp_task_order.task_id = current_finest_task_combination[i].first;
 	tmp_task_order.task_robot = current_finest_task_combination[i].second;

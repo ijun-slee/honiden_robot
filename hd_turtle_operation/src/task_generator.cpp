@@ -14,7 +14,7 @@
   以下の3つのトピックを受け取り、タスクの候補を作成する。
   nav_msgs::OccupancyGrid "ground_map"
   nav_msgs::OccupancyGrid "obstacle_map"
-  turtle_operation::pathPlanSet "path_plan_set"
+  hd_turtle_operation::pathPlanSet "path_plan_set"
 			
 
 
@@ -58,8 +58,8 @@ namespace turtle_operator{
     nav_msgs::OccupancyGrid ground_map;//地面のもの
     turtle_utility::GridMap grid_map;
     nav_msgs::OccupancyGrid obstacle_map;//障害物のたかさ
-    turtle_operation::pathPlanSet uav_path_plan_set;//UAVのPathPlan
-    turtle_operation::graphBasedMap simple_task_graph_based_map;//シンプルな観測点生成のためのトピック
+    hd_turtle_operation::pathPlanSet uav_path_plan_set;//UAVのPathPlan
+    hd_turtle_operation::graphBasedMap simple_task_graph_based_map;//シンプルな観測点生成のためのトピック
     TaskCandidate task_candidate;//タスクの候補   
     PointsWithID uav_path;//uavが通るPath
     ros::Subscriber ground_map_sub;
@@ -77,11 +77,11 @@ namespace turtle_operator{
 
     void getGroundMapCallback(const nav_msgs::OccupancyGrid g_map);
     void getObstacleCallback(const nav_msgs::OccupancyGrid o_map);
-    void getPathPlanSetCallback(const turtle_operation::pathPlanSet path_plan_set);
+    void getPathPlanSetCallback(const hd_turtle_operation::pathPlanSet path_plan_set);
     void observeTaskGenerate(const int grid_rate);
     void observeTaskCandidateGenerate(const int grid_rate);//gridをどれほど粗くするかを設定する。
                                                            //粗くしない場合は1
-    void getGraphBasedMapCallback(const turtle_operation::graphBasedMap graph_based_map);    
+    void getGraphBasedMapCallback(const hd_turtle_operation::graphBasedMap graph_based_map);    
     void getSaveMsgCallback(const std_msgs::String str);    
 
     void subscriberInit();
@@ -198,7 +198,7 @@ namespace turtle_operator{
 
   }
 
-  void TaskGenerator::getPathPlanSetCallback(const turtle_operation::pathPlanSet path_plan_set){
+  void TaskGenerator::getPathPlanSetCallback(const hd_turtle_operation::pathPlanSet path_plan_set){
     ROS_INFO("(TaskGenerator) getPathPlanSetCallback");
     uav_path_plan_set = path_plan_set;
     grid_path_resolution = uav_path_plan_set.grid_path_resolution.data;
@@ -222,7 +222,7 @@ namespace turtle_operator{
     
   }
 
-  void TaskGenerator::getGraphBasedMapCallback(const turtle_operation::graphBasedMap graph_based_map){
+  void TaskGenerator::getGraphBasedMapCallback(const hd_turtle_operation::graphBasedMap graph_based_map){
     ROS_INFO("(TaskGenerator) getGraphBasedMap");
 
 
@@ -240,10 +240,10 @@ namespace turtle_operator{
     obstacle_map_sub = 
       nh.subscribe<nav_msgs::OccupancyGrid>("obstacle_map", 1, 
 					    &TaskGenerator::getObstacleCallback,this);
-    path_plan_set_sub = nh.subscribe<turtle_operation::pathPlanSet>("path_plan_set", 1,
+    path_plan_set_sub = nh.subscribe<hd_turtle_operation::pathPlanSet>("path_plan_set", 1,
 								    &TaskGenerator::getPathPlanSetCallback,this);	
     graph_based_map_sub = 					  
-      nh.subscribe<turtle_operation::graphBasedMap>("graph_based_map", 1, 
+      nh.subscribe<hd_turtle_operation::graphBasedMap>("graph_based_map", 1, 
 						    &TaskGenerator::getGraphBasedMapCallback,this);
     save_msg_sub = 
       nh.subscribe<std_msgs::String>("save_msg", 1, 
@@ -252,10 +252,10 @@ namespace turtle_operator{
   }
 
   void TaskGenerator::publisherInit(){
-    task_order_set_container_pub = nh.advertise<turtle_operation::taskOrderSetContainer>("task_order_set_container", 1);
-    task_candidates_pub = nh.advertise<turtle_operation::taskCandidates>("task_candidates", 1);
+    task_order_set_container_pub = nh.advertise<hd_turtle_operation::taskOrderSetContainer>("task_order_set_container", 1);
+    task_candidates_pub = nh.advertise<hd_turtle_operation::taskCandidates>("task_candidates", 1);
     points_with_id_pub = nh.advertise<nav_msgs::Path>("points_with_id", 1);
-    first_task_orders_pub = nh.advertise<turtle_operation::taskOrderSet>("first_task_orders", 1);
+    first_task_orders_pub = nh.advertise<hd_turtle_operation::taskOrderSet>("first_task_orders", 1);
     error_msg_pub = nh.advertise<std_msgs::String>("task_generator_error_msg", 1);
   }
 
@@ -367,7 +367,7 @@ namespace turtle_operator{
       break;
     }
 
-    turtle_operation::taskOrderSetContainer tosc;
+    hd_turtle_operation::taskOrderSetContainer tosc;
     taskCandidatePublish();
     taga.showFinestTaskCombination();
     taga.showFinestGroups();
@@ -381,9 +381,9 @@ namespace turtle_operator{
 
   void TaskGenerator::taskCandidatePublish(){
 
-    turtle_operation::taskCandidates tc;
+    hd_turtle_operation::taskCandidates tc;
     for(int i  = 0; i < task_candidate.size(); i++){
-      turtle_operation::observeTask tmp_observe_task;
+      hd_turtle_operation::observeTask tmp_observe_task;
       tmp_observe_task.start_id = task_candidate[i].start_id;
       tmp_observe_task.end_id = task_candidate[i].end_id;
       tmp_observe_task.observe_x = task_candidate[i].observe_x;
@@ -524,7 +524,7 @@ namespace turtle_operator{
     //id_containerをクラスタリングする
     int pre_id = id_container[0];
     int start_id = id_container[0];
-    turtle_operation::observeTask tmp_observe_task;
+    hd_turtle_operation::observeTask tmp_observe_task;
     int task_size = 0;
     for(int i = 1 ; i < id_container.size() ; i++){
       //            std::cout<<id_container[i]<<" ";

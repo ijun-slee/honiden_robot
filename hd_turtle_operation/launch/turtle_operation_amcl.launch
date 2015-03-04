@@ -14,7 +14,7 @@
     <!-- <arg name="depth_registration" value="false" /> -->
     <!-- <arg name="depth_processing" value="false" /> -->
 <!--  <include file="$(find turtlebot_navigation)/launch/includes/amcl.launch.xml"> デフォルト-->
- <include file="$(find turtle_operation)/launch/includes/multi_amcl.launch.xml">
+ <include file="$(find hd_turtle_operation)/launch/includes/multi_amcl.launch.xml">
     <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
@@ -22,7 +22,7 @@
     <arg name="ns_turtle" value="$(arg ns_turtle)" /> 
   </include>
 
-  <include file="$(find turtle_operation)/launch/turtle_sensor.launch"> 
+  <include file="$(find hd_turtle_operation)/launch/turtle_sensor.launch"> 
 <!--    <arg name="turtle_device_id" value="#1"/>-->
    <arg name="turtle_device_id" value="$(arg amcl_device_id)"/>
     <!-- We must specify an absolute topic name because if not it will be prefixed by "$(arg camera)".
@@ -42,11 +42,11 @@
 
   <!-- Map server -->
   <!--  <arg name="map_file" default="$(find turtlebot_navigation)/maps/willow-2010-02-18-0.10.yaml"/> -->
-  <arg name="map_file" default="$(find turtle_operation)/maps/experiment_hall.yaml"/> 
+  <arg name="map_file" default="$(find hd_turtle_operation)/maps/experiment_hall.yaml"/> 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
     
   <!--  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/> デフォルト-->
-  <include file="$(find turtle_operation)/launch/includes/multi_move_base.launch.xml">
+  <include file="$(find hd_turtle_operation)/launch/includes/multi_move_base.launch.xml">
     <arg name="ns_turtle" value="$(arg ns_turtle)"/>
 
   </include>

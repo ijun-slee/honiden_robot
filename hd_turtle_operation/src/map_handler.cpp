@@ -10,13 +10,13 @@
 #include <nodelet/nodelet.h>
 #include <std_msgs/Float64.h>
 #include <geometry_msgs/PoseStamped.h> 
-#include <turtle_operation/graphBasedMap.h>
+#include <hd_turtle_operation/graphBasedMap.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <nav_msgs/Path.h>
-#include <turtle_operation/pathPlanSet.h>
+#include <hd_turtle_operation/pathPlanSet.h>
 
 #include <cv.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -43,7 +43,7 @@ class MapHandler{
   int grid_rate;//Gridを減らす割合。1で通常通り。
   unsigned int graph_grid_threshold;//GraphBasedMapを作成する際に、最低限必要とされるGridの数。これを下回った時点で終わり。
   std::vector<GridCluster> Grids_container;
-  turtle_operation::pathPlanSet path_plan_set;
+  hd_turtle_operation::pathPlanSet path_plan_set;
   bool showNodeCoordination;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
@@ -91,11 +91,11 @@ public:
    inner_circleよりも外側で、outer_circleよりも内側にgridが存在するかどうかを返す関数。
   */
   void showGridMapWithParticularPoints();
-  turtle_operation::graphBasedMap getGraphBasedMapFromGridClusters(std::vector<GridCluster> Grids_);
+  hd_turtle_operation::graphBasedMap getGraphBasedMapFromGridClusters(std::vector<GridCluster> Grids_);
   /*
 特徴点と共にMapを表示する
    */
-  void showGridMapWithGraphBasedMap(turtle_operation::graphBasedMap graph);
+  void showGridMapWithGraphBasedMap(hd_turtle_operation::graphBasedMap graph);
 
   void test();//テスト用の関数。
 
@@ -163,8 +163,8 @@ public:
 
   void MapHandler::publiserInit(){
     ROS_INFO("(Map Handler) publisherInit");
-    path_plan_set_pub = nh.advertise<turtle_operation::pathPlanSet>("path_plan_set",1);
-    graph_based_map_pub = nh.advertise<turtle_operation::graphBasedMap>("graph_based_map",1);
+    path_plan_set_pub = nh.advertise<hd_turtle_operation::pathPlanSet>("path_plan_set",1);
+    graph_based_map_pub = nh.advertise<hd_turtle_operation::graphBasedMap>("graph_based_map",1);
     
 
   }
@@ -300,7 +300,7 @@ public:
 
     }
     
-    turtle_operation::graphBasedMap graph=
+    hd_turtle_operation::graphBasedMap graph=
       getGraphBasedMapFromGridClusters(Grids_container);
     //    showGridMapWithParticularPoints(); 
     showGridMapWithGraphBasedMap(graph);
@@ -419,7 +419,7 @@ public:
   }
 
 
-  void MapHandler::showGridMapWithGraphBasedMap(turtle_operation::graphBasedMap graph){
+  void MapHandler::showGridMapWithGraphBasedMap(hd_turtle_operation::graphBasedMap graph){
     ROS_INFO("ShowGridMapWithGraphBasedMap");
     int origin_array_x, origin_array_y;
     //この分岐は必要ないかもなあ。
@@ -499,12 +499,12 @@ std::string save_filename =
   }
 
 
-  turtle_operation::graphBasedMap 
+  hd_turtle_operation::graphBasedMap 
   MapHandler::getGraphBasedMapFromGridClusters(std::vector<GridCluster> Grids_){
-    turtle_operation::graphBasedMap graph;
+    hd_turtle_operation::graphBasedMap graph;
 
     for(int i = 0;i<Grids_.size();i++){
-    turtle_operation::graphNode node;
+    hd_turtle_operation::graphNode node;
     node.nodeId = i;
     
     GridCluster tmp_grids = Grids_[i];

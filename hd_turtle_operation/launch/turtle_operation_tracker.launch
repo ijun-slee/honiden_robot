@@ -4,22 +4,22 @@
  <arg name="ns_turtle" default=""/>
  <arg name="tracker_device_id" default="#2"/>
 
-  <include file="$(find turtle_operation)/launch/includes/velocity_smoother.launch.xml" />
-  <include file="$(find turtle_operation)/launch/includes/safety_controller.launch.xml"/>
+  <include file="$(find hd_turtle_operation)/launch/includes/velocity_smoother.launch.xml" />
+  <include file="$(find hd_turtle_operation)/launch/includes/safety_controller.launch.xml"/>
   <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
 
 
  <include file="$(find topic_handler)/launch/add_namespace.launch"/>
 
   <!--上のKinectの起動-->
-  <include file="$(find turtle_operation)/launch/turtle_tracker.launch" ns="$(arg namespace)">
+  <include file="$(find hd_turtle_operation)/launch/turtle_tracker.launch" ns="$(arg namespace)">
     <arg name="ns" value="$(arg namespace)"/>
     <arg name="ns_turtle" value="$(arg ns_turtle)"/>
     <arg name="tracker_device_id" value="$(arg tracker_device_id)"/>
 <!--   <arg name="tracker_device_id" value="#2"/>   -->
   </include> 
 
-  <include file="$(find turtle_operation)/launch/turtlebot_bringup_launch/minimal.launch">  	   
+  <include file="$(find hd_turtle_operation)/launch/turtlebot_bringup_launch/minimal.launch">  	   
     <arg name="ns_turtle" value="$(arg ns_turtle)"/>
   </include>
 </launch>

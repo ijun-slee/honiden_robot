@@ -203,7 +203,7 @@ namespace turtle_operator{
   //   int n_task = 0;//現在のタスク
   //   TaskCandidate tmp_task_candidate;//現在のタスク
   //   int path_point_count = 0;
-  //   turtle_operation::observeTask tmp_observe_task;
+  //   hd_turtle_operation::observeTask tmp_observe_task;
   //   for(int i = 0 ; i < path.size();i++){
 
 
@@ -389,7 +389,7 @@ namespace turtle_operator{
     
   }
 
-  void TaskAllocGA::simpleCreateIndividualFromGraphBasedMap(const turtle_operation::graphBasedMap &graph_based_map ){
+  void TaskAllocGA::simpleCreateIndividualFromGraphBasedMap(const hd_turtle_operation::graphBasedMap &graph_based_map ){
 
 
   }
@@ -910,7 +910,7 @@ namespace turtle_operator{
     if(task_candidate[tc[change_tc_id].first].end_id==path_end_id){
       // ROS_INFO("Task id %d is the last task id", change_tc_id);
       //いっこ前のものとの兼ね合いを考える。
-      //   std::vector<turtle_operation::observeTask> tmp_observe_tasks;
+      //   std::vector<hd_turtle_operation::observeTask> tmp_observe_tasks;
 
       for(int i = 0 ; i < task_candidate.size();i++){
 	if(task_candidate[i].end_id == path_end_id)
@@ -1071,11 +1071,11 @@ namespace turtle_operator{
 
   }
 
-  void TaskAllocGA::setTaskOrderInContainer(turtle_operation::taskOrderSetContainer &tosc, int taskOrderSetSize){
+  void TaskAllocGA::setTaskOrderInContainer(hd_turtle_operation::taskOrderSetContainer &tosc, int taskOrderSetSize){
     //新しい実装
-    turtle_operation::taskOrderSet tmp_task_orders_g; 
+    hd_turtle_operation::taskOrderSet tmp_task_orders_g; 
     for(int j = 0; j < current_finest_task_combination_global.size(); j++){
-      turtle_operation::taskOrder tmp_task_combination_g;
+      hd_turtle_operation::taskOrder tmp_task_combination_g;
       tmp_task_combination_g.task_id 
 	= current_finest_task_combination_global[j].first; 
 	tmp_task_combination_g.task_robot 
@@ -1089,10 +1089,10 @@ namespace turtle_operator{
     //古い実装      for(int i = 0 ; i < taskOrderSetSize-1 ; i++){
     //新しい実装
     for(int i = 0 ; i < taskOrderSetSize-1 ; i++){
-      turtle_operation::taskOrderSet tmp_task_orders;
+      hd_turtle_operation::taskOrderSet tmp_task_orders;
       int id = fitnessScoresWithID[i].first;
       for(int j = 0; j < current_groups[id].size(); j++){
-	turtle_operation::taskOrder tmp_task_combination;
+	hd_turtle_operation::taskOrder tmp_task_combination;
 	tmp_task_combination.task_id 
 	  = current_groups[id][j].first; 
 	tmp_task_combination.task_robot 

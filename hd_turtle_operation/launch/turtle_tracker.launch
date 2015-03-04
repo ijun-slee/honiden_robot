@@ -28,7 +28,7 @@
     <param name="min_y" value="-1.0" />
   </node>
 
-  <node pkg="turtle_operation" type="turtle_tf_broadcaster" name="turtle_tf_broadcaster" output="screen">
+  <node pkg="hd_turtle_operation" type="turtle_tf_broadcaster" name="turtle_tf_broadcaster" output="screen">
     <param name="child_frame" value="kinect_" />
     <param name="global_frame" value="map" />
     <param name="namespace_sensor" value="$(arg ns)" />

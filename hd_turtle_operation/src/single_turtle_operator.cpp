@@ -67,7 +67,7 @@ namespace turtle_operator{
     ros::NodeHandle private_nh;
     TurtleOperator* turtle;
     // TurtleOperator **turtles;
-    turtle_operation::graphBasedMap graph_map;
+    hd_turtle_operation::graphBasedMap graph_map;
     nav_msgs::OccupancyGrid occupancy_grid_map;
     std::vector<Eigen::Vector2d, Eigen::aligned_allocator<Eigen::Vector2d> > nodes;
  

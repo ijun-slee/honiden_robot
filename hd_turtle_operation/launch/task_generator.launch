@@ -7,7 +7,7 @@
   <arg name="task_order_set_size" default="20"/> 
   <arg name="n_turtle" default="3"/> 
 
-  <node pkg="turtle_operation" type="task_generator" name="task_generator" output="screen" required="true">
+  <node pkg="hd_turtle_operation" type="task_generator" name="task_generator" output="screen" required="true">
     <remap from="ground_map" to ="occupancy_grid_map"/>
     <remap from="obstacle_map" to ="obstacle_map"/>
     <remap from="path_plan_set" to ="path_plan_set"/>

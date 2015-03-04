@@ -12,7 +12,7 @@
   <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
 
   <!--上のKinectの起動-->
-  <include file="$(find turtle_operation)/launch/turtle_tracker.launch" ns="$(arg namespace)">
+  <include file="$(find hd_turtle_operation)/launch/turtle_tracker.launch" ns="$(arg namespace)">
     <arg name="ns" value="$(arg namespace)"/>
    <arg name="tracker_device_id" value="A00362805336053A"/>
    <!--   <arg name="tracker_device_id" value="#2"/>   -->
@@ -33,7 +33,7 @@
     <arg name="scan_topic" value="$(arg scanname)" /> 
   </include>
 
-  <include file="$(find turtle_operation)/launch/turtle_sensor.launch"> 
+  <include file="$(find hd_turtle_operation)/launch/turtle_sensor.launch"> 
 <!--    <arg name="turtle_device_id" value="#1"/>-->
    <arg name="turtle_device_id" value="A00361814136040A"/>
     <!-- We must specify an absolute topic name because if not it will be prefixed by "$(arg camera)".
@@ -42,7 +42,7 @@
   </include> 
   
   <!-- Map server -->
-  <arg name="map_file" default="$(find turtle_operation)/maps/around_table.yaml"/> 
+  <arg name="map_file" default="$(find hd_turtle_operation)/maps/around_table.yaml"/> 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
   <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
   <!--#################amclの起動 終わり#############################-->

@@ -58,12 +58,12 @@ namespace turtle_operator{
     SimParam sim_param;//Simulatorで使う用のスケジューリングパラメーター
     TurtlePathPlanner path_planner;//経路探索のためのプランナー
     double uav_speed;//UAVの速度
-    turtle_operation::pathPlanSet uav_path_plan_set;//UAVのPathPlanのセット
-    turtle_operation::taskCandidates GAtask_candidates;
-    //    turtle_operation::taskOrderSet GAtask_orders;
-    turtle_operation::taskOrderSet GAfirst_task_orders;
-    turtle_operation::taskOrderSet GAcur_task_orders;
-    turtle_operation::taskOrderSetContainer GAtask_order_set_container; 
+    hd_turtle_operation::pathPlanSet uav_path_plan_set;//UAVのPathPlanのセット
+    hd_turtle_operation::taskCandidates GAtask_candidates;
+    //    hd_turtle_operation::taskOrderSet GAtask_orders;
+    hd_turtle_operation::taskOrderSet GAfirst_task_orders;
+    hd_turtle_operation::taskOrderSet GAcur_task_orders;
+    hd_turtle_operation::taskOrderSetContainer GAtask_order_set_container; 
 
     nav_msgs::Path points_with_id;
     CalcCounter exhaustive_counter;
@@ -90,14 +90,14 @@ namespace turtle_operator{
     void getTurtlesParameterFromYaml(std::string yaml_file_path);
     void showTurtlePositionInMap(std::vector<TurtleOperator*> &Turtles, nav_msgs::OccupancyGrid &GridMap);
     double getUAVMoveTimeFromSpeedPath(double uav_speed, const nav_msgs::Path path);
-    double getUAVMoveTimeForGAmode(double uav_speed, int node_n, const turtle_operation::taskOrderSet &task_order_set);
+    double getUAVMoveTimeForGAmode(double uav_speed, int node_n, const hd_turtle_operation::taskOrderSet &task_order_set);
     void addTaskbarToImage(cv::Mat& output_img, TurtleOperator* turtle, cv::Point start_point, cv::Point goal_point, double resolution);
     void imageWriter(cv::Mat frame, std::string filepath);
     void showOrder(std::vector<int> order);
     void taskCostChecker(turtle_operator::TurtleTask task);
-    void setNodesFromGAtaskCandidatesOrders(turtle_operation::taskCandidates task_candidates,
-					    turtle_operation::taskOrderSet task_orders);
-    inline void setCurrentTaskOrderSet(turtle_operation::taskOrderSet &to){ GAcur_task_orders = to;}
+    void setNodesFromGAtaskCandidatesOrders(hd_turtle_operation::taskCandidates task_candidates,
+					    hd_turtle_operation::taskOrderSet task_orders);
+    inline void setCurrentTaskOrderSet(hd_turtle_operation::taskOrderSet &to){ GAcur_task_orders = to;}
     void saveGAResult(double simple_time, double GA_time, double exhaustive_time, double turtle_time);
     void saveMsgPublish();
   public:
@@ -165,7 +165,7 @@ namespace turtle_operator{
       min_task_time = 10000;      
       getMoveTimeWithNodeFlag = true;
 
-      save_file_dir = "/home/slee/Dropbox/experiment_result/turtle_operation/";
+      save_file_dir = "/home/slee/Dropbox/experiment_result/hd_turtle_operation/";
       GAdensity = "normal";
 
       private_nh.param("save_file_dir_name",
@@ -272,7 +272,7 @@ namespace turtle_operator{
     std::vector<TurtleOperator*> turtles;
     std::vector<std::vector<double> > dijkstra_distance;//FromNodeとToNode, costの順番で定義
     // TurtleOperator **turtles;
-    turtle_operation::graphBasedMap graph_map;
+    hd_turtle_operation::graphBasedMap graph_map;
     nav_msgs::OccupancyGrid occupancy_grid_map;
     std::vector<Eigen::Vector2d, Eigen::aligned_allocator<Eigen::Vector2d> > nodes;
     std::vector<int> task_order;//タスクをこなしていくタートルの順番
@@ -288,12 +288,12 @@ namespace turtle_operator{
     ros::Subscriber points_with_id_sub;
     ros::Subscriber task_generator_error_msg_sub;
     void getOccupancyGridMapCallback(const nav_msgs::OccupancyGrid map);
-    void getGraphBasedMapCallback(const turtle_operation::graphBasedMap map);
-    void getPathPlanSetCallback(const turtle_operation::pathPlanSet path_plan_set);
-    void getTaskCandidatesCallback(const turtle_operation::taskCandidates task_candidates);
-    void getTaskOrdersCallback(const turtle_operation::taskOrderSet task_orders);
-    void getFirstTaskOrdersCallback(const turtle_operation::taskOrderSet task_orders);//最初のタスクを受け取る。
-    void getTaskOrderSetContainerCallback(const turtle_operation::taskOrderSetContainer task_order_set_container);
+    void getGraphBasedMapCallback(const hd_turtle_operation::graphBasedMap map);
+    void getPathPlanSetCallback(const hd_turtle_operation::pathPlanSet path_plan_set);
+    void getTaskCandidatesCallback(const hd_turtle_operation::taskCandidates task_candidates);
+    void getTaskOrdersCallback(const hd_turtle_operation::taskOrderSet task_orders);
+    void getFirstTaskOrdersCallback(const hd_turtle_operation::taskOrderSet task_orders);//最初のタスクを受け取る。
+    void getTaskOrderSetContainerCallback(const hd_turtle_operation::taskOrderSetContainer task_order_set_container);
     void getPointsWithIDCallback(const nav_msgs::Path pwid);
     void getTaskGeneratorErrorMsg(const std_msgs::String str);
     void run();
@@ -411,7 +411,7 @@ namespace turtle_operator{
 
   double MultiTurtleOperator::getUAVMoveTimeForGAmode(double uav_speed, int node_n, 
 						      // const nav_msgs::Path &path_with_id,
-						       const turtle_operation::taskOrderSet &task_order_set){
+						       const hd_turtle_operation::taskOrderSet &task_order_set){
     //// ROS_INFO("getUAVMoveTimeForGAmode Node: %d", node_n);
     int tmp_start_path_id = 0;
     int tmp_goal_path_id = 0 ;
@@ -446,19 +446,19 @@ namespace turtle_operator{
     ROS_INFO("MultiTurtleOperator: subscriberInitialize");
     occupancy_grid_map_sub = nh.subscribe<nav_msgs::OccupancyGrid>("occupancy_grid_map", 1, 
 								   &MultiTurtleOperator::getOccupancyGridMapCallback,this);
-    graph_based_map_sub = nh.subscribe<turtle_operation::graphBasedMap>("graph_based_map", 1, 
+    graph_based_map_sub = nh.subscribe<hd_turtle_operation::graphBasedMap>("graph_based_map", 1, 
 									&MultiTurtleOperator::getGraphBasedMapCallback,this);
-    path_plan_set_sub = nh.subscribe<turtle_operation::pathPlanSet>("path_plan_set", 1,
+    path_plan_set_sub = nh.subscribe<hd_turtle_operation::pathPlanSet>("path_plan_set", 1,
 								    &MultiTurtleOperator::getPathPlanSetCallback,this);						  
-    task_candidates_sub = nh.subscribe<turtle_operation::taskCandidates>("task_candidates", 1,
+    task_candidates_sub = nh.subscribe<hd_turtle_operation::taskCandidates>("task_candidates", 1,
 								    &MultiTurtleOperator::getTaskCandidatesCallback,this);						  
-    // task_orders_sub = nh.subscribe<turtle_operation::taskOrderSet>("task_orders", 1,
+    // task_orders_sub = nh.subscribe<hd_turtle_operation::taskOrderSet>("task_orders", 1,
     // 								    &MultiTurtleOperator::getTaskOrdersCallback,this);						 
-    first_task_orders_sub = nh.subscribe<turtle_operation::taskOrderSet>("first_task_orders", 1,
+    first_task_orders_sub = nh.subscribe<hd_turtle_operation::taskOrderSet>("first_task_orders", 1,
 							       &MultiTurtleOperator::getFirstTaskOrdersCallback,this);						  
      
     task_order_set_container = 
-      nh.subscribe<turtle_operation::taskOrderSetContainer>("task_order_set_container", 1,
+      nh.subscribe<hd_turtle_operation::taskOrderSetContainer>("task_order_set_container", 1,
 							    &MultiTurtleOperator::getTaskOrderSetContainerCallback, this);    
     points_with_id_sub = 
       nh.subscribe<nav_msgs::Path>("points_with_id", 1,
@@ -482,7 +482,7 @@ namespace turtle_operator{
   }
 
 
-  void MultiTurtleOperator::getGraphBasedMapCallback(const turtle_operation::graphBasedMap map){
+  void MultiTurtleOperator::getGraphBasedMapCallback(const hd_turtle_operation::graphBasedMap map){
     ROS_INFO("get Graph Based Map");
     if(map.graphNodes.size() == 0){
       ROS_WARN("This graph Map has no Node");
@@ -514,7 +514,7 @@ namespace turtle_operator{
     graph_based_map_flag = true;
   }
   
-  void MultiTurtleOperator::getPathPlanSetCallback(const turtle_operation::pathPlanSet path_plan_set){
+  void MultiTurtleOperator::getPathPlanSetCallback(const hd_turtle_operation::pathPlanSet path_plan_set){
     ROS_INFO("(getPathPlanSet) Got Path Plan");   
     uav_path_plan_set = path_plan_set;
 
@@ -528,14 +528,14 @@ namespace turtle_operator{
     ROS_INFO("(getPointsWithIDCallback) nav_size: %d", points_with_id.poses.size());
     GApoint_with_id_flag = true;
   }
-  void MultiTurtleOperator::getTaskCandidatesCallback(const turtle_operation::taskCandidates task_candidates){
+  void MultiTurtleOperator::getTaskCandidatesCallback(const hd_turtle_operation::taskCandidates task_candidates){
     GAtask_candidates = task_candidates;
     ROS_INFO("(getTaskCandidatesCallback) Got task candidates");
     ROS_INFO("(getTaskCandidatesCallback) %d candidates", GAtask_candidates.observeTasks.size());
     GA_task_candidates_flag = true;
   }
 
-  // void MultiTurtleOperator::getTaskOrdersCallback(const turtle_operation::taskOrderSet task_orders){
+  // void MultiTurtleOperator::getTaskOrdersCallback(const hd_turtle_operation::taskOrderSet task_orders){
   //   GAtask_orders = task_orders;
   //   ROS_INFO("(getTaskOrdersCallback) Got task orders");
   //   ROS_INFO("(getTaskOrdersCallback) %d orders", GAtask_orders.taskOrders.size());
@@ -543,7 +543,7 @@ namespace turtle_operator{
   //   GA_task_orders_flag = true;
   // }
 
-  void MultiTurtleOperator::getFirstTaskOrdersCallback(const turtle_operation::taskOrderSet task_orders){
+  void MultiTurtleOperator::getFirstTaskOrdersCallback(const hd_turtle_operation::taskOrderSet task_orders){
     GAfirst_task_orders = task_orders;
     ROS_INFO("(getTaskOrdersCallback) Got first task orders");
     ROS_INFO("(getTaskOrdersCallback) %d orders", GAfirst_task_orders.taskOrders.size());
@@ -552,7 +552,7 @@ namespace turtle_operator{
   }
 
 
-  void MultiTurtleOperator::getTaskOrderSetContainerCallback(const turtle_operation::taskOrderSetContainer task_order_set_container){
+  void MultiTurtleOperator::getTaskOrderSetContainerCallback(const hd_turtle_operation::taskOrderSetContainer task_order_set_container){
     GAtask_order_set_container = task_order_set_container;
     ROS_INFO("(getTaskOrderSetContainerCallback) Got task order set container");
     ROS_INFO("(getTaskOrderSetContainerCallback) %d order sets", 
@@ -577,8 +577,8 @@ namespace turtle_operator{
     exit(0);
   }
 
-  void MultiTurtleOperator::setNodesFromGAtaskCandidatesOrders(turtle_operation::taskCandidates task_candidates,
-							       turtle_operation::taskOrderSet task_orders){
+  void MultiTurtleOperator::setNodesFromGAtaskCandidatesOrders(hd_turtle_operation::taskCandidates task_candidates,
+							       hd_turtle_operation::taskOrderSet task_orders){
     
     nodes.clear();
     for(int i = 0 ; i < task_orders.taskOrders.size();i++){
@@ -1611,7 +1611,7 @@ namespace turtle_operator{
     }
     }
     std::string taskSaveFilename = 
-      "/home/slee/cooperative_project/src/multi_robot_cooperation/turtle_operation/tasks/tasks.dat";
+      "/home/slee/cooperative_project/src/multi_robot_cooperation/hd_turtle_operation/tasks/tasks.dat";
 
     if(save_)   saveTasks(turtles, uav_move_start_time, uav_move_time,taskSaveFilename,nodes.size() - turtles.size(), 1.0);
     if(show_task_)showRobotsTasks(turtles, uav_move_start_time, uav_move_time,taskSaveFilename,nodes.size() - turtles.size(), 1.0);
@@ -1711,13 +1711,13 @@ int main(int argc, char** argv){
   ros::NodeHandle nh;
   ros::NodeHandle nh_private("~");
   //テスト用========
-  //turtle_operation::graph
+  //hd_turtle_operation::graph
 
   //===============
   //  turtle_operator::MultiTurtleOperator*  mt = new turtle_operator::MultiTurtleOperator(nh, nh_private);
 
   // if(argv[1]==0){
-  //   std::cout<<"Usage: rosrun turtle_operation multi_turtle_operation [save_filename]"<<std::endl;
+  //   std::cout<<"Usage: rosrun hd_turtle_operation multi_hd_turtle_operation [save_filename]"<<std::endl;
     
   //   return 0;
   // } 

@@ -8,7 +8,7 @@
     double resolution;//
     PointsWithID path;
     int path_room;//IDの猶予
-    //    turtle_operation::pathPlanSet path_plan_set;
+    //    hd_turtle_operation::pathPlanSet path_plan_set;
     std::vector<TaskOrder> taskOrderSet;//taskOrderの現在の個体
     // std::vector<geometry_msgs::PoseStamped> path;
     int path_end_id;

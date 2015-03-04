@@ -10,7 +10,7 @@
 #include <nodelet/nodelet.h>
 #include <std_msgs/Float64.h>
 #include <geometry_msgs/PoseStamped.h> 
-#include <turtle_operation/graphBasedMap.h>
+#include <hd_turtle_operation/graphBasedMap.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 #include <nav_msgs/Odometry.h>
@@ -58,7 +58,7 @@ int main(int argc, char** argv){
   std::cout<<"argc = "<<argc<<std::endl;
   if(argc<5){
     std::cout<<"Usage:"<<std::endl;
-    std::cout<<"rosrun turtle_operation simple_goal_publisher turtle_name x y theta"<<std::endl;
+    std::cout<<"rosrun hd_turtle_operation simple_goal_publisher turtle_name x y theta"<<std::endl;
     return 0;
   }
 

@@ -10,12 +10,12 @@
   <arg name="odom_topic" default="odom" />
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <rosparam file="$(find turtle_operation)/param/param_$(arg ns_turtle)/costmap_common_params.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find turtle_operation)/param/param_$(arg ns_turtle)/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find turtle_operation)/param/param_$(arg ns_turtle)/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find turtle_operation)/param/param_$(arg ns_turtle)/global_costmap_params.yaml" command="load" />
-    <rosparam file="$(find turtle_operation)/param/param_$(arg ns_turtle)/base_local_planner_params.yaml" command="load" />
-    <rosparam file="$(find turtle_operation)/param/param_$(arg ns_turtle)/move_base_params.yaml" command="load" />
+    <rosparam file="$(find hd_turtle_operation)/param/param_$(arg ns_turtle)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find hd_turtle_operation)/param/param_$(arg ns_turtle)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find hd_turtle_operation)/param/param_$(arg ns_turtle)/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find hd_turtle_operation)/param/param_$(arg ns_turtle)/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find hd_turtle_operation)/param/param_$(arg ns_turtle)/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find hd_turtle_operation)/param/param_$(arg ns_turtle)/move_base_params.yaml" command="load" />
 
 <!--デフォルト    <remap from="cmd_vel" to="navigation_velocity_smoother/raw_cmd_vel"/> -->
     <remap from="cmd_vel" to="follower_velocity_smoother/raw_cmd_vel"/> 

@@ -1,4 +1,4 @@
-image: /home/slee/cooperative_project/src/heterogeneous_cooperation/turtle_operation/maps/around_table.pgm
+image: /home/slee/cooperative_project/src/heterogeneous_cooperation/hd_turtle_operation/maps/around_table.pgm
 resolution: 0.050000
 origin: [-13.800000, -13.800000, 0.000000]
 negate: 0

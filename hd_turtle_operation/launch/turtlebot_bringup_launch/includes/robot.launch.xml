@@ -7,7 +7,7 @@
   <arg name="stacks"/>
   <arg name="3d_sensor"/>
   
-  <include file="$(find turtle_operation)/launch/turtlebot_bringup_launch/includes/description.launch.xml">
+  <include file="$(find hd_turtle_operation)/launch/turtlebot_bringup_launch/includes/description.launch.xml">
     <arg name="base" value="$(arg base)" />
     <arg name="stacks" value="$(arg stacks)" />
     <arg name="3d_sensor" value="$(arg 3d_sensor)" />

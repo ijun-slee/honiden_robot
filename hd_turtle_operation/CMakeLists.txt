@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(hd_turtle_operation)
+project(hd_hd_turtle_operation)
 
 set(CMAKE_BUILD_TYPE Debug)
 find_package(catkin REQUIRED 
@@ -62,7 +62,7 @@ generate_messages(
 ###################################
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES turtle_operation
+#  LIBRARIES hd_turtle_operation
    CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_runtime nav_msgs
 #  DEPENDS system_lib
 )
@@ -96,7 +96,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(turtle_operation_node turtle_operation_generate_messages_cpp)
+# add_dependencies(hd_turtle_operation_node hd_turtle_operation_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(multi_turtle_operator
@@ -162,7 +162,7 @@ target_link_libraries(task_generator
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS turtle_operation turtle_operation_node
+# install(TARGETS hd_turtle_operation hd_turtle_operation_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -187,7 +187,7 @@ target_link_libraries(task_generator
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_turtle_operation.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_hd_turtle_operation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
