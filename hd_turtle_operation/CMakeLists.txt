@@ -74,13 +74,13 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 
 ## Declare a cpp library
- add_library(turtle_operator
-   src/turtle_operator.cpp
- )
+ # add_library(turtle_operator
+ #   src/turtle_operator.cpp
+ # )
 
- add_library(genetic_algorithm
-   src/genetic_algorithm.cpp
- )
+ # add_library(genetic_algorithm
+ #   src/genetic_algorithm.cpp
+ # )
 
 ## Declare a cpp executable
 #  add_executable(multi_turtle_operator src/path_planning.cpp src/multi_turtle_operator.cpp)
