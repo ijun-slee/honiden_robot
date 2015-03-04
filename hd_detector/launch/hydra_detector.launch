@@ -13,7 +13,7 @@
 <!-- この上の部分は必要らしい。 -->
 <!-- これがないと、TFの例外処理(TF exception)が働いてしまう。 -->
 
- <node pkg="hd_kinect_control" type="hd_kinect_control_tilt" name="hd_kinect_control_tilt"/>
+ <node pkg="hd_kinect_control" type="kinect_control_tilt" name="kinect_control_tilt"/>
 
           
 <node pkg="detector" type="hydra_detector" name="object_detector" output="screen">
